@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">@color/lightBlueSplash</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="darkBlueSplash">#5222FE</color>
+    <color name="lightBlueSplash">#21D3FD</color>
+    <color name="greyText">#051d31</color>
+    <color name="whiteText">#c5f3fe</color>
+    <color name="facebookBlue">#3b5998</color>
+    <color name="googleRed">#d9534f</color>
+    <color name="spotifyGreen">#24cf5f</color>
+
+    <color name="darkBlueRooms">#0093e9</color>
+    <color name="lightBlueRooms">#21d4fd</color>
+    <color name="darkBlueSpotifyRoom">#051d31</color>
+    <color name="lightBlueSpotifyRoom">#0093e9</color>
+    <color name="blueYoutubeRoom">#21d4fd</color>
+    <color name="magentaYoutubeRoom">#ff11a0</color>
+    <color name="blueMoreUsers">#5321ff</color>
+    <color name="darkRedRoom">#ff2525</color>
+    <color name="midRedRoom">#ff6a88</color>
+    <color name="lightRedRoom">#ff99ac</color>
+
+    <color name="darkRedShadow">#4dff2525</color>
+    <color name="lightBlueText">#519ac5</color>
+    <color name="brightRedText">#ff2525</color>
+
+    <color name="lightBlueNoInternet">#0089da</color>
+    <color name="darkBlueNoInternet">#042842</color>
+
+    <color name="greyButton">#506677</color>
+
+    <color name="darkBlueRoomBackground">#051d31</color>
+    <color name="whiteTextInfo">#f5f8fb</color>
+
+    <color name="whiteTextDate">#ecf1ff</color>
+    <color name="greyDivider">#1f000000</color>
+    <color name="greyTextSubtitle">#8a000000</color>
+    <color name="blueIndicator">#0093e9</color>
+    <color name="greySetting">#eeeeee</color>
+    <color name="transparentBlueSwitch">#76C0EB</color>
+
+    <color name="greyTextProfile">#cad9e6</color>
+</resources>

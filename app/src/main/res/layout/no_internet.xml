@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    android:background="@drawable/bg_no_internet"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:gravity="center"
+    android:layout_height="match_parent">
+    <ImageView
+        android:src="@drawable/tear"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+    <TextView
+        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        android:text="@string/msg_no_internet"
+        android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:textSize="16sp"
+        android:textColor="@android:color/white"
+        android:text="@string/msg_refresh"
+        android:layout_marginTop="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ImageView
+        android:layout_marginTop="20dp"
+        android:src="@drawable/baseline_refresh_white_36"
+        android:layout_width="32dp"
+        android:layout_height="32dp" />
+</LinearLayout>

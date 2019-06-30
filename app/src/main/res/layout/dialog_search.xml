@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
+    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@drawable/bg_search"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="32dp"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/edit_search"
+            android:textSize="14sp"
+            android:hint="@string/hint_search_room"
+            app:backgroundTint="@android:color/black"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/btn_dialog_search"
+            android:background="@null"
+            android:src="@drawable/baseline_search_black_24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</FrameLayout>

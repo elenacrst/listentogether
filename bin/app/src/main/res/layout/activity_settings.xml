@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:background="@android:color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".ui.activity.SettingsActivity">
+
+        <com.elena.listentogether.ui.custom.expandablelayout.ExpandableLinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/container_expand"
+            android:layout_height="wrap_content">
+            <include
+                layout="@layout/group_settings"/>
+            <android.support.constraint.ConstraintLayout
+                android:background="@color/greySetting"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:paddingStart="72dp"
+                    android:paddingEnd="24dp"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_members"
+                    app:layout_constraintRight_toLeftOf="@+id/switch_members"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="@string/title_new_members"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textSize="16sp"
+                    android:id="@+id/text_new_member"
+                    android:textColor="@android:color/black"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:paddingStart="72dp"
+                    android:paddingEnd="24dp"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_members"
+                    app:layout_constraintRight_toLeftOf="@id/switch_members"
+                    app:layout_constraintTop_toBottomOf="@+id/text_new_member"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="@string/label_new_member"
+                    android:textSize="14sp"
+                    android:id="@+id/text_subtitle_new_member"
+                    android:textColor="@color/greyTextSubtitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <android.support.v7.widget.SwitchCompat
+                    android:paddingEnd="24dp"
+                    android:id="@+id/switch_members"
+                    app:thumbTint="@color/blueIndicator"
+                    app:trackTint="@color/transparentBlueSwitch"
+                    tools:checked="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/text_new_member"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:paddingStart="72dp"
+                    android:paddingEnd="24dp"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_members"
+                    app:layout_constraintRight_toLeftOf="@+id/switch_members"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="@string/title_messaging"
+                    app:layout_constraintTop_toBottomOf="@+id/text_subtitle_new_member"
+                    android:textSize="16sp"
+                    android:id="@+id/text_messaging"
+                    android:textColor="@android:color/black"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:paddingStart="72dp"
+                    android:paddingEnd="24dp"
+                    app:layout_constraintEnd_toStartOf="@+id/switch_members"
+                    app:layout_constraintRight_toLeftOf="@id/switch_members"
+                    app:layout_constraintTop_toBottomOf="@+id/text_messaging"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="@string/label_messaging"
+                    android:textSize="14sp"
+                    android:id="@+id/text_subtitle_messaging"
+                    android:textColor="@color/greyTextSubtitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <android.support.v7.widget.SwitchCompat
+                    android:paddingEnd="24dp"
+                    android:id="@+id/switch_messages"
+                    app:thumbTint="@color/blueIndicator"
+                    app:trackTint="@color/transparentBlueSwitch"
+                    tools:checked="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/text_messaging"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    app:layout_constraintTop_toBottomOf="@+id/text_subtitle_messaging"
+                    android:id="@+id/container_reminder"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:paddingStart="72dp"
+                        android:paddingEnd="24dp"
+                        app:layout_constraintEnd_toStartOf="@+id/switch_members"
+                        app:layout_constraintRight_toLeftOf="@+id/switch_members"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="@string/title_reminder"
+                        app:layout_constraintTop_toBottomOf="@+id/text_subtitle_messaging"
+                        android:textSize="16sp"
+                        android:id="@+id/text_reminder"
+                        android:textColor="@android:color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:paddingStart="72dp"
+                        android:paddingEnd="24dp"
+                        app:layout_constraintEnd_toStartOf="@+id/switch_members"
+                        app:layout_constraintRight_toLeftOf="@id/switch_members"
+                        app:layout_constraintTop_toBottomOf="@+id/text_reminder"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="Daily"
+                        android:textSize="14sp"
+                        android:id="@+id/text_subtitle_reminder"
+                        android:textColor="@color/greyTextSubtitle"
+                        android:layout_width="wrap_content"
+                        android:paddingBottom="20dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </android.support.constraint.ConstraintLayout>
+        </com.elena.listentogether.ui.custom.expandablelayout.ExpandableLinearLayout>
+        <LinearLayout
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/info"
+                android:layout_width="72dp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="@string/title_privacy_policy"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif"
+                android:textColor="@android:color/black"
+                android:lineSpacingExtra="8sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        
+        <View
+            android:background="@color/greyDivider"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+        <LinearLayout
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/about"
+                android:layout_width="72dp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="@string/title_about"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif"
+                android:textColor="@android:color/black"
+                android:lineSpacingExtra="8sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <View
+            android:background="@color/greyDivider"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"/>
+        <LinearLayout
+            android:paddingTop="20dp"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/version"
+                android:layout_width="72dp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="@string/title_version"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif"
+                android:textColor="@android:color/black"
+                android:lineSpacingExtra="8sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <TextView
+            android:layout_marginStart="72dp"
+            android:text="@string/app_version"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/greyTextSubtitle"
+            android:lineSpacingExtra="8sp"
+            android:paddingTop="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</ScrollView>

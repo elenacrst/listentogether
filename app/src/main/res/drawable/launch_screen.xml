@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <gradient
+                android:angle="270"
+                android:startColor="@color/lightBlueSplash"
+                android:endColor="@color/darkBlueSplash"/>
+
+        </shape>
+    </item>
+    <item
+        android:top="188dp" android:bottom="328dp"
+        android:left="104dp" android:right="104dp">
+        <bitmap
+
+            android:src="@drawable/splash_logo"
+            android:gravity="center_horizontal"/>
+    </item>
+    <item
+        android:bottom="20dp"
+        android:top="352dp">
+
+        <bitmap android:src="@drawable/splash_notes"
+            android:gravity="center_horizontal"
+
+            />
+    </item>
+</layer-list>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:id="@+id/container_notifications_group"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:layout_marginTop="20dp"
+        android:id="@+id/image_notification"
+        android:src="@drawable/notification"
+        android:layout_width="72dp"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_alignTop="@id/image_notification"
+        android:layout_alignBottom="@id/image_notification"
+        android:layout_toRightOf="@id/image_notification"
+        android:textSize="16sp"
+        android:id="@+id/text_notifications"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingEnd="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:textColor="@android:color/black"
+        android:text="@string/title_notifications"
+        />
+    <com.elena.listentogether.ui.custom.expandablelayout.FlippingImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/baseline_keyboard_arrow_down_black_24"
+        android:background="@null"
+        android:tint="@color/blueIndicator"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        />
+    <View
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/image_notification"
+        android:background="@color/greyDivider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"/>
+</RelativeLayout>

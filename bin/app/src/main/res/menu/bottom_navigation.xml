@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_info"
+        android:title="@string/item_info"
+        android:orderInCategory="0"
+        android:icon="@drawable/info_black"
+        />
+    <item
+        android:id="@+id/action_search"
+        android:title="@string/item_search"
+        android:orderInCategory="1"
+        android:icon="@drawable/baseline_search_black_24"
+
+        />
+    <item
+        android:id="@+id/action_chat"
+        android:title="@string/item_chat"
+        android:orderInCategory="2"
+        android:icon="@drawable/chat"
+        />
+    <item
+        android:id="@+id/action_leave"
+        android:title="@string/item_leave"
+        android:orderInCategory="3"
+        android:icon="@drawable/baseline_exit_to_app_black_24"
+        />
+</menu>

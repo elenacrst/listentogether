@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "831817126294",
+    "firebase_url": "https://listen-together-notif.firebaseio.com",
+    "project_id": "listen-together-notif",
+    "storage_bucket": "listen-together-notif.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831817126294:android:76d3b87197d5fcf1",
+        "android_client_info": {
+          "package_name": "com.elena.listentogether"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "831817126294-m3sa968jdv3pe3ereveadj78ch7jmk96.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDc20Wb2VSeIwzN62dn9RaPDefA9LYpsrM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "831817126294-m3sa968jdv3pe3ereveadj78ch7jmk96.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

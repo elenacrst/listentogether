@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/rounded_rec_dialog"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="@string/title_reminder_period"
+        android:textColor="@android:color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_marginTop="12dp"
+        android:background="@color/greyDivider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"/>
+    <RadioGroup
+
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:layout_marginTop="12dp"
+        android:id="@+id/radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
+        <android.support.v7.widget.AppCompatRadioButton
+            android:id="@+id/btn_daily"
+            android:textSize="14sp"
+            android:paddingStart="36dp"
+            android:text="@string/btn_daily"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:id="@+id/btn_weekly"
+            android:textSize="14sp"
+            android:paddingStart="36dp"
+            android:text="@string/btn_weekly"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <RadioButton
+            android:id="@+id/btn_never"
+            android:textSize="14sp"
+            android:paddingStart="36dp"
+            android:text="@string/btn_never"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RadioGroup>
+    <View
+        android:layout_marginTop="12dp"
+        android:background="@color/greyDivider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"/>
+    <LinearLayout
+        android:layout_marginLeft="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_gravity="end"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:textColor="@color/darkBlueNoInternet"
+            android:textSize="14sp"
+            android:id="@+id/btn_cancel"
+            android:layout_marginStart="8dp"
+            android:text="@string/action_cancel"
+            android:background="@null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:textColor="@color/darkBlueNoInternet"
+            android:textSize="14sp"
+            android:id="@+id/btn_ok"
+            android:text="@string/action_ok"
+            android:background="@null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

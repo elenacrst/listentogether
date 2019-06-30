@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/bg_room"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="5"
+    tools:context=".ui.activity.RoomDetailActivity">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:elevation="12dp"
+                android:background="@color/darkBlueRooms"
+                android:gravity="center"
+                android:paddingBottom="8dp"
+                android:orientation="horizontal"
+                android:paddingTop="8dp"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!--<ImageButton-->
+                    <!--android:background="@null"-->
+                    <!--android:src="@drawable/baseline_menu_white_24"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
+                <TextView
+                    android:id="@+id/text_room_title"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:text="HEAVY METAL ROOM"
+                    android:layout_margin="8dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+                <ImageButton
+                    android:onClick="onSearchButtonClick"
+                    android:id="@+id/btn_search_video"
+                    android:tint="@android:color/white"
+                    android:background="@null"
+                    android:src="@drawable/baseline_search_black_24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/text_current_song"
+                android:layout_marginBottom="12dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center_horizontal"
+                tools:text="METALLICA - Master of puppets (official video)"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+        <include layout="@layout/dialog_search" android:visibility="gone" />
+    </FrameLayout>
+    <!--<com.google.android.youtube.player.YouTubePlayerView-->
+        <!--android:id="@+id/player"-->
+        <!--android:layout_weight="2"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"/>-->
+    <FrameLayout
+        android:id="@+id/container_player"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"/>
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_weight="3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/darkBlueRooms"
+        app:itemIconTint="@android:color/white"
+        app:itemTextColor="@android:color/white"
+        app:menu="@menu/bottom_navigation" />
+</LinearLayout>
