@@ -11,17 +11,16 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DimenRes;
-import android.support.annotation.DrawableRes;
+import androidx.annotation.ColorInt;
+import androidx.annotation.DimenRes;
+import androidx.annotation.DrawableRes;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.elena.listentogether.R;
 
 @SuppressWarnings("UnusedDeclaration")
-public class RoundedImageView extends android.support.v7.widget.AppCompatImageView {
+public class RoundedImageView extends androidx.appcompat.widget.AppCompatImageView {
 
     // Constants for tile mode attributes
     private static final int TILE_MODE_UNDEFINED = -2;

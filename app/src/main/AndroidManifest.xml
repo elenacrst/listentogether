@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
+
         android:name=".base.App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -20,8 +21,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
-        tools:replace="android:allowBackup">
+        android:usesCleartextTraffic="true">
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <activity android:name=".ui.activity.ProfileActivity" android:theme="@style/Theme_ActionBar"></activity>
         <activity
             android:name=".ui.activity.SettingsActivity"
@@ -31,17 +32,21 @@
         <activity
             android:name=".ui.activity.RegisterActivity"
             android:launchMode="singleTask" />
+
         <activity
             android:name=".ui.activity.MainActivity"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.Launcher">
             <intent-filter>
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- todo test different layouts when keyboard appears in room detail activity -->
+        </activity>
+
+        <!-- fixme test different layouts when keyboard appears in room detail activity -->
         <service
             android:name=".notification.NotificationsService"
             android:exported="false">
@@ -57,7 +62,7 @@
         </receiver>
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">

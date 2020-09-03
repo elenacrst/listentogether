@@ -1,12 +1,16 @@
 package com.elena.listentogether.ui.activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.provider.Settings;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.SwitchCompat;
+import androidx.appcompat.widget.SwitchCompat;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -24,9 +28,6 @@ import com.elena.listentogether.reminder.AlarmUtils;
 import com.elena.listentogether.ui.custom.expandablelayout.ExpandableLinearLayout;
 import com.elena.listentogether.utils.Constants;
 import com.elena.listentogether.utils.SharedPrefUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static android.app.AlarmManager.INTERVAL_DAY;
 
@@ -113,11 +114,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void showReminderDialog() {
         SharedPrefUtils sharedPrefUtils = new SharedPrefUtils(this);
-
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_reminder);
-
         RadioGroup rg =  dialog.findViewById(R.id.radio_group);
         dialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +128,6 @@ public class SettingsActivity extends AppCompatActivity {
         dailyBtn = dialog.findViewById(R.id.btn_daily);
         weeklyBtn = dialog.findViewById(R.id.btn_weekly);
         neverBtn = dialog.findViewById(R.id.btn_never);
-
         String savedReminder = sharedPrefUtils.getString(SharedPrefUtils.KEY_REMINDER, Constants.SETTING_REMINDER_DAILY);
         switch (savedReminder){
             case Constants.SETTING_REMINDER_DAILY:
@@ -159,7 +157,6 @@ public class SettingsActivity extends AppCompatActivity {
                         mReminderValueTextView.setText(R.string.btn_never);
                         break;
                 }
-
                 dialog.dismiss();
             }
         });
@@ -185,5 +182,24 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onPrivacyPolicy(View view) {
+        String url = "https://www.freeprivacypolicy.com/privacy/view/9afef356caa08e8c99d0f6a6aa60dd20";
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
+    }
+
+    public void onAbout(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+// 2. Chain together various setter methods to set the dialog characteristics
+        builder.setMessage(R.string.msg_about)
+                .setTitle(R.string.title_about);
+
+// 3. Get the <code><a href="/reference/android/app/AlertDialog.html">AlertDialog</a></code> from <code><a href="/reference/android/app/AlertDialog.Builder.html#create()">create()</a></code>
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

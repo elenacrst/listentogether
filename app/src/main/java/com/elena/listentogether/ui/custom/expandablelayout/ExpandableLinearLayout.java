@@ -10,9 +10,9 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.NestedScrollView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
@@ -23,17 +23,6 @@ import android.widget.LinearLayout;
 
 import com.elena.listentogether.utils.ViewUtils;
 
-
-/**
- * The parent layout provides expand/collapse animation for it's the second components.
- */
-@SuppressWarnings({
-        "PMD.GodClass",
-        "PMD.TooManyMethods",
-        "PMD.CyclomaticComplexity",
-        "PMD.ModifiedCyclomaticComplexity",
-        "PMD.StdCyclomaticComplexity",
-})
 public class ExpandableLinearLayout extends ForegroundLinearLayout {
     private static final int MAX_ANIMATION_DURATION = 500;
     private static final float ANIMATION_RATE = 0.75f;
@@ -51,96 +40,32 @@ public class ExpandableLinearLayout extends ForegroundLinearLayout {
     private OnExpandListener mListener;
     private ExpandBadge mFlippingImageButton;
 
-    /**
-     * Callback to be called when an {@link ExpandableLinearLayout} has changed its state.
-     */
     public interface OnExpandListener {
-        /**
-         * Called when an {@link ExpandableLinearLayout} has changed its state.
-         *
-         * @param isExpanded the state
-         */
         void onExpandableStateChanged(boolean isExpanded);
     }
 
-    /**
-     * An interface for a view that can be set as the expanding/collapsing icon view with special animation.
-     */
     public interface ExpandBadge {
-        /**
-         * Sets state of the button.
-         *
-         * @param isExpanded If {@code true} the badge should be expanded, {@code false} otherwise
-         * @param animate    If {@code true} the badge uses animation
-         */
         void setExpanded(final boolean isExpanded, final boolean animate);
-
-        /**
-         * Set the enabled state of this view.
-         *
-         * @param visibility One of {@link #VISIBLE}, {@link #INVISIBLE}, or {@link #GONE}.
-         */
         void setVisibility(int visibility);
-
-        /**
-         * Sets animation duration of flipping button.
-         *
-         * @param duration duration of animation
-         */
         void setAnimationDuration(long duration);
-
-        /**
-         * Sets animation interpolator.
-         *
-         * @param interpolator animation {@link TimeInterpolator}
-         */
         void setInterpolator(TimeInterpolator interpolator);
     }
 
-    /**
-     * Simple constructor to use when creating a view from code.
-     *
-     * @param context The Context the view is running in, through which it can access the current theme, resources, etc
-     */
     public ExpandableLinearLayout(final Context context) {
         super(context);
         this.init();
     }
 
-    /**
-     * Constructor that is called when inflating a view from XML.
-     *
-     * @param context The Context the view is running in, through which it can access the current theme, resources, etc
-     * @param attrs   The attributes of the XML tag that is inflating the view
-     */
     public ExpandableLinearLayout(final Context context, final AttributeSet attrs) {
         super(context, attrs);
         this.init();
     }
 
-    /**
-     * Perform inflation from XML and apply a class-specific base style from a theme attribute.
-     *
-     * @param context      The Context the view is running in, through which it can access the current theme, resources, etc
-     * @param attrs        The attributes of the XML tag that is inflating the view
-     * @param defStyleAttr An attribute in the current theme that contains a reference to a style resource that supplies default values for the view.
-     *                     Can be 0 to not look for defaults
-     */
     public ExpandableLinearLayout(final Context context, final AttributeSet attrs, final int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.init();
     }
 
-    /**
-     * Perform inflation from XML and apply a class-specific base style from a theme attribute or style resource.
-     *
-     * @param context      The Context the view is running in, through which it can access the current theme, resources, etc
-     * @param attrs        The attributes of the XML tag that is inflating the view
-     * @param defStyleAttr An attribute in the current theme that contains a reference to a style resource that supplies default values for the view.
-     *                     Can be 0 to not look for defaults
-     * @param defStyleRes  A resource identifier of a style resource that supplies default values for the view, used only if defStyleAttr is 0 or can not be found in the theme.
-     *                     Can be 0 to not look for defaults.
-     */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public ExpandableLinearLayout(final Context context, final AttributeSet attrs, final int defStyleAttr, final int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
@@ -153,11 +78,6 @@ public class ExpandableLinearLayout extends ForegroundLinearLayout {
         mIsExpandable = true;
     }
 
-    /**
-     * Set listener.
-     *
-     * @param listener the listener
-     */
     public void setOnExpandListener(@Nullable final OnExpandListener listener) {
         this.mListener = listener;
     }
@@ -170,20 +90,10 @@ public class ExpandableLinearLayout extends ForegroundLinearLayout {
         }
     }
 
-    /**
-     * Returns whether this {@link ExpandableLinearLayout} is expanded.
-     *
-     * @return {@code true} if this {@link ExpandableLinearLayout} is expanded, {@code false}  otherwise.
-     */
     public final boolean isExpanded() {
         return mIsExpanded;
     }
 
-    /**
-     * Set expanded/collapsible mode for {@link ExpandableLinearLayout}.
-     *
-     * @param expandable If {@code true} then {@link ExpandableLinearLayout} is expandable, {@code false} otherwise.
-     */
     public void setExpandable(final boolean expandable) {
         if (mIsExpandable != expandable) {
             mIsExpandable = expandable;
@@ -192,9 +102,6 @@ public class ExpandableLinearLayout extends ForegroundLinearLayout {
         }
     }
 
-    /**
-     * Perform expansion.
-     */
     public final void expand() {
         if (isEnabled() && mExpandedContentView != null && !mIsExpanded) {
             this.setupAnimation();
@@ -204,9 +111,6 @@ public class ExpandableLinearLayout extends ForegroundLinearLayout {
         }
     }
 
-    /**
-     * Perform collapse.
-     */
     public final void collapse() {
         if (isEnabled() && mExpandedContentView != null && mIsExpanded) {
             this.setupAnimation();
@@ -216,11 +120,6 @@ public class ExpandableLinearLayout extends ForegroundLinearLayout {
         }
     }
 
-    /**
-     * Sets the expanded state.
-     *
-     * @param expanded {@code true} if the content view should be expanded, {@code false} otherwise
-     */
     public void setExpanded(final boolean expanded) {
         if (mIsExpanded != expanded) {
             if (mAnimator != null && mAnimator.isRunning()) {
@@ -340,29 +239,22 @@ public class ExpandableLinearLayout extends ForegroundLinearLayout {
     @Override
     public void onViewRemoved(@NonNull final View child) {
         super.onViewRemoved(child);
-        if (mHeaderView == child) { // NOPMD
+        if (mHeaderView == child) {
             mHeaderView.setOnClickListener(null);
-            mHeaderView = null; // NOPMD We need a nullable reference since we have removed this child from the view hierarchy
-        } else if (mExpandedContentView == child) { // NOPMD
+            mHeaderView = null;
+        } else if (mExpandedContentView == child) {
             if (mAnimator != null) {
                 mAnimator.removeAllUpdateListeners();
                 mAnimator.removeAllListeners();
-                mAnimator = null; // NOPMD We need a nullable reference since we have removed this child from the view hierarchy
+                mAnimator = null;
             }
-            mExpandedContentView = null; // NOPMD We need a nullable reference since we have removed this child from the view hierarchy
+            mExpandedContentView = null;
         }
     }
 
-    /**
-     * Called when the header view is added.
-     */
     protected void onHeaderViewUpdated() {
-        //nothing here
     }
 
-    /**
-     * Called when the expandable content view is added.
-     */
     protected void onContentViewUpdated() {
         this.updateExpandableMode();
     }
@@ -403,7 +295,7 @@ public class ExpandableLinearLayout extends ForegroundLinearLayout {
        // mExpandedContentView.measure(widthSpec, heightSpec);
         return mExpandedContentView.getMeasuredHeight();
     }
-    //todo animation for expanding the list
+    //fixme animation for expanding the list
 
     private class AnimatorListener extends AnimatorListenerAdapter implements ValueAnimator.AnimatorUpdateListener {
         final Rect mThisRect = new Rect();

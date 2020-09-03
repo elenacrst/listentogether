@@ -1,9 +1,10 @@
 package com.elena.listentogether.ui.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,17 +16,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import com.elena.listentogether.BuildConfig;
 import com.elena.listentogether.R;
 import com.elena.listentogether.base.App;
 import com.elena.listentogether.ui.viewmodel.user.UserViewModel;
+import com.elena.listentogether.utils.Constants;
 import com.elena.listentogether.utils.ImageEncodingUtils;
 import com.elena.listentogether.utils.SharedPrefUtils;
 import com.squareup.picasso.Picasso;
@@ -48,7 +50,7 @@ import javax.inject.Inject;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Retrofit;
 
-import static android.support.v4.content.PermissionChecker.PERMISSION_GRANTED;
+import static androidx.core.content.PermissionChecker.PERMISSION_GRANTED;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -78,6 +80,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         findViews();
         populateProfile();
+     //   hideKeyboard(this);
+
 
         if (getSupportActionBar() != null){
             getSupportActionBar().setTitle(R.string.title_profile);
@@ -93,10 +97,12 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         setupViewModel();
+        SharedPrefUtils sharedPrefUtils = new SharedPrefUtils(this);
+        mUserViewModel.loadUserRoomsCount(this, sharedPrefUtils.getLong(SharedPrefUtils.KEY_PROFILE_ID));
         mUserViewModel.getmUserRoomsCount().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer integer) {
-                mRoomsCountTextView.setText(integer == null ? String.valueOf(0) : String.valueOf(integer));
+                mRoomsCountTextView.setText(""+ (integer == null ? String.valueOf(0) : String.valueOf(integer)));
             }
         });
     }
@@ -110,15 +116,15 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void populateProfile() {
-        if (!TextUtils.isEmpty(mSharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_AVATAR, ""))){
+   /*     if (!TextUtils.isEmpty(mSharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_AVATAR, ""))){
             Picasso.get().load(mSharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_AVATAR, ""));
-        }
+        }*/
         if (!TextUtils.isEmpty(mSharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_USERNAME, ""))){
             mUsernameTextView.setText(mSharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_USERNAME, ""));
         }
         if (!TextUtils.isEmpty(mSharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_EMAIL, ""))){
             mEmailTextView.setText(mSharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_EMAIL, ""));
-        }//todo request to get number of rooms
+        }
         if (!TextUtils.isEmpty(mSharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_COUNTRY, ""))){
             mCountryEditText.setText(mSharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_COUNTRY, ""));
         }
@@ -289,15 +295,21 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void openGallery() {
-        Intent intent = new   Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new   Intent(
+                Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        );
         startActivityForResult(intent, RC_GALLERY);
     }
 
     private void openCamera() {
         try {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider",
-                    createImageFile()));
+            intent.putExtra(
+                    MediaStore.EXTRA_OUTPUT,
+                    FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider",
+                    createImageFile())
+            );
             startActivityForResult(intent, RC_CAMERA);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -313,15 +325,8 @@ public class ProfileActivity extends AppCompatActivity {
                 String fileLocation = new String(mCameraFilePath);
                 fileLocation = fileLocation.replaceFirst("file://", "");
                 String encodedAvatar = ImageEncodingUtils.getBase64String(fileLocation);
-               // Log.wtf("userid","encoded "+encodedAvatar);
-                mUserViewModel.updateAvatar(this, mSharedPrefUtils.getLong(SharedPrefUtils.KEY_PROFILE_ID), encodedAvatar);
-
-               /* mUserViewModel.getmUpdateResult().observe(this, new Observer<String>() {
-                    @Override
-                    public void onChanged(@Nullable String s) {
-
-                    }
-                });*/
+                mUserViewModel.updateAvatar(this, mSharedPrefUtils.getLong(SharedPrefUtils.KEY_PROFILE_ID),
+                        encodedAvatar);
                 mSharedPrefUtils.saveString(SharedPrefUtils.KEY_PROFILE_AVATAR, encodedAvatar);
             } else if (requestCode == RC_GALLERY) {
                 Uri selectedImage = data.getData();
@@ -331,13 +336,12 @@ public class ProfileActivity extends AppCompatActivity {
                 c.moveToFirst();
                 int columnIndex = c.getColumnIndex(filePath[0]);
                 String picturePath = c.getString(columnIndex);
-                Log.wtf("userid","path "+picturePath+" "+mSharedPrefUtils.getLong(SharedPrefUtils.KEY_PROFILE_ID)+" id");
                 c.close();
                 Bitmap thumbnail = (BitmapFactory.decodeFile(picturePath));
-                //Log.w("path of image from gallery......******************.........", picturePath+"");
                 mAvatarImageView.setImageBitmap(thumbnail);
                 String encodedAvatar = ImageEncodingUtils.getBase64String(picturePath);
-                mUserViewModel.updateAvatar(this, mSharedPrefUtils.getLong(SharedPrefUtils.KEY_PROFILE_ID), encodedAvatar);
+                mUserViewModel.updateAvatar(this, mSharedPrefUtils.getLong(SharedPrefUtils.KEY_PROFILE_ID),
+                        encodedAvatar);
                 mSharedPrefUtils.saveString(SharedPrefUtils.KEY_PROFILE_AVATAR, encodedAvatar);
             }
         }
@@ -365,8 +369,13 @@ public class ProfileActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date(System.currentTimeMillis()));
         String imageFileName = "JPEG_" + timeStamp + "_";
         //This is the directory in which the file will be created. This is the default location of Camera photos
-        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM), "Camera");
+        /*File storageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM), "Camera");*/
+
+        File storageDir = new File(Environment.getExternalStorageDirectory(), Constants.APP_DIR);
+        if (!storageDir.exists()){
+            storageDir.mkdir();
+        }
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -377,11 +386,21 @@ public class ProfileActivity extends AppCompatActivity {
         return image;
     }
 
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home){
             onBackPressed();
-            return true;
         }
         return super.onOptionsItemSelected(item);
     }

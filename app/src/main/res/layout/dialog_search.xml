@@ -14,7 +14,7 @@
         android:paddingTop="24dp"
         android:paddingBottom="32dp"
         android:layout_height="wrap_content">
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/edit_search"
             android:textSize="14sp"
             android:hint="@string/hint_search_room"

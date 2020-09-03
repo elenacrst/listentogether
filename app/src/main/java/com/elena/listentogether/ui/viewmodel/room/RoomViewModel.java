@@ -1,17 +1,12 @@
 package com.elena.listentogether.ui.viewmodel.room;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
-import com.elena.listentogether.data.local.entity.RoomEntity;
-import com.elena.listentogether.data.local.entity.UserEntity;
-import com.elena.listentogether.ui.viewmodel.user.IUserImpl;
+import com.elena.listentogether.model.local.entity.RoomEntity;
 
 import java.util.List;
 

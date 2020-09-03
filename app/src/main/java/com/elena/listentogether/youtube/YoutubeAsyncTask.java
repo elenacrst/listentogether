@@ -2,7 +2,7 @@ package com.elena.listentogether.youtube;
 
 import android.os.AsyncTask;
 
-import com.elena.listentogether.data.local.entity.VideoItem;
+import com.elena.listentogether.model.local.entity.VideoItem;
 
 import java.util.List;
 

@@ -1,15 +1,12 @@
 package com.elena.listentogether.ui.viewmodel.listen;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.elena.listentogether.R;
-import com.elena.listentogether.data.local.entity.ListenEntity;
-import com.elena.listentogether.data.local.entity.RoomEntity;
-import com.elena.listentogether.data.remote.ApiCallInterface;
+import com.elena.listentogether.model.local.entity.ListenEntity;
+import com.elena.listentogether.model.remote.ApiCallInterface;
 
 import java.util.List;
 

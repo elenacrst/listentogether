@@ -15,19 +15,19 @@
         android:textColor="@android:color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:textSize="16sp"
             android:id="@+id/edit_room_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_room_name"/>
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
     <!--<android.support.design.widget.TextInputLayout-->
     <!--android:layout_marginTop="8dp"-->
     <!--android:layout_width="match_parent"-->
@@ -41,19 +41,19 @@
         <!--android:hint="@string/hint_room_password"/>-->
 
 <!--</android.support.design.widget.TextInputLayout>-->
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.design.widget.TextInputEditText
+        <com.google.android.material.textfield.TextInputEditText
             android:textSize="16sp"
             android:id="@+id/edit_room_icon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_room_icon"/>
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
     <RadioGroup
         android:layout_marginTop="8dp"
         android:orientation="vertical"

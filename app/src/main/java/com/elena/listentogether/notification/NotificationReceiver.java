@@ -5,21 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.elena.listentogether.data.local.entity.RoomEntity;
-import com.elena.listentogether.data.local.entity.UserEntity;
 import com.elena.listentogether.ui.activity.RoomDetailActivity;
 import com.elena.listentogether.utils.Constants;
 
-public class NotificationReceiver  extends BroadcastReceiver {
+import java.util.Objects;
 
+public class NotificationReceiver  extends BroadcastReceiver {
     private NotificationListener mNotificationListener;
 
-    public NotificationReceiver(){
-    }
-
-    /*public NotificationReceiver(NotificationListener listener) {
-        mNotificationListener = listener;
-    }*/
+    public NotificationReceiver(){ }
 
     public void setmNotificationListener(NotificationListener mNotificationListener) {
         this.mNotificationListener = mNotificationListener;
@@ -27,21 +21,8 @@ public class NotificationReceiver  extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.wtf("received","receiver, intent : "+intent.getAction());
-      //  Log.d(TAG, "onReceive() called with: context = [" + context + "], intent = [" + intent + "]");
-       /* if (intent.getAction() != null){
-            switch (intent.getAction()){
-                case NotificationsService.ACTION_USER_TURN:
-                    //here is my beacon impl
-                    break;
-
-                default:
-                    break;
-
-            }
-        }*/
        if (mNotificationListener != null){
-           switch (intent.getAction()){
+           switch (Objects.requireNonNull(intent.getAction())){
                case Constants.ACTION_USER_TURN:
                    mNotificationListener.onRoomVideoSelection(intent.getParcelableExtra(RoomDetailActivity.EXTRA_ROOM),
                            intent.getParcelableExtra(NotificationsService.EXTRA_USER),
@@ -52,12 +33,8 @@ public class NotificationReceiver  extends BroadcastReceiver {
                    break;
                case Constants.ACTION_MESSAGE:
                    mNotificationListener.onMessageReceived();
-                       //    intent.getParcelableExtra(NotificationsService.EXTRA_MESSAGE));
                    break;
            }
-
        }
     }
-
-
 }

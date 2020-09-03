@@ -1,7 +1,7 @@
 package com.elena.listentogether.ui.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +9,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.elena.listentogether.R;
-import com.elena.listentogether.data.local.entity.RoomEntity;
+import com.elena.listentogether.model.local.entity.RoomEntity;
+import com.elena.listentogether.model.local.entity.UserEntity;
 import com.elena.listentogether.ui.custom.roundedimageview.RoundedImageView;
+import com.elena.listentogether.utils.ImageEncodingUtils;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -22,11 +26,17 @@ public class RoomsAdapter extends RecyclerView.Adapter<RoomsAdapter.RoomViewHold
     private List<RoomEntity> roomList;
     private Context context;
     private RoomListener listener;
+    private HashMap<Long, List<UserEntity>> usersInRooms = new HashMap<>();
 
     public RoomsAdapter(List<RoomEntity> roomList, Context context) {
         this.roomList = roomList;
         this.context = context;
         this.listener = (RoomListener)context;
+        notifyDataSetChanged();
+    }
+
+    public void setUsersInRooms(Map<Long, List<UserEntity>> map){
+        usersInRooms = new HashMap<>(map);
         notifyDataSetChanged();
     }
 
@@ -47,7 +57,7 @@ public class RoomsAdapter extends RecyclerView.Adapter<RoomsAdapter.RoomViewHold
                 .load(room.getIconPath())
                 .placeholder(R.drawable.placeholder_room)
                 .into(holder.thumbnail);
-        if (room.getMembersCount() > 2){
+        if (room.getMembersCount() > 2){//todo request get listens for room, then get user avatars
             holder.secondUser.setVisibility(View.VISIBLE);
             //todo load users for room
             holder.users.setVisibility(View.VISIBLE);
@@ -63,12 +73,22 @@ public class RoomsAdapter extends RecyclerView.Adapter<RoomsAdapter.RoomViewHold
             holder.usersCount.setVisibility(View.GONE);
         }
 
+        if (usersInRooms.get(room.getId()) != null){
+            if (usersInRooms.get(room.getId()).size() > 1){
+                ImageEncodingUtils.decodeBase64AndSetImage(usersInRooms.get(room.getId()).get(1).getAvatar(), holder.secondUser);
+            }
+            if (usersInRooms.get(room.getId()).size() > 0){
+                ImageEncodingUtils.decodeBase64AndSetImage(usersInRooms.get(room.getId()).get(0).getAvatar(), holder.firstUser);
+            }
+        }
+
+
         Picasso.get()
                 .load(R.drawable.youtube)
                 .placeholder(R.drawable.placeholder_room)
                 .into(holder.source);
         Picasso.get()
-                .load("https://www.southwales.ac.uk/media/images/Music_and_Sound_End_of.91ae7805.fill-900x682.format-jpeg.jpg")
+                .load(room.getIconPath())
                 .placeholder(R.drawable.placeholder_room)
                 .into(holder.thumbnail);
 

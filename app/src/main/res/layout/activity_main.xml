@@ -16,7 +16,7 @@
         android:layout_height="0dp"
         android:paddingBottom="20dp"
         android:layout_weight="3"/>
-    <android.support.v7.widget.AppCompatEditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/edit_username"
         android:layout_marginTop="24dp"
         android:layout_weight="0.6"
@@ -33,7 +33,7 @@
         android:paddingBottom="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <android.support.v7.widget.AppCompatEditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/edit_password"
         android:layout_weight="0.6"
         android:textSize="14sp"
@@ -88,29 +88,46 @@
     <FrameLayout
         android:layout_marginTop="12dp"
         android:layout_weight="1"
-        android:elevation="12dp"
-        android:background="@drawable/rounded_rec_btn_blue"
-        android:layout_marginRight="48dp"
-        android:layout_marginLeft="48dp"
+        android:id="@+id/FrameLayout1"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
-        <TextView
-            android:id="@+id/text_fb"
-            android:paddingEnd="24dp"
-            android:ems="7"
-            android:gravity="center"
+        android:layout_height="0dp" >
 
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:drawablePadding="12dp"
-            android:drawableStart="@drawable/facebook"
-
-            android:textSize="16sp"
-            android:text="@string/action_facebook"
-            android:textColor="@android:color/white"
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/btn_fb_login"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <FrameLayout
+            android:onClick="onFacebookSignIn"
+
+
+            android:elevation="12dp"
+            android:background="@drawable/rounded_rec_btn_blue"
+            android:layout_marginRight="48dp"
+            android:layout_marginLeft="48dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/text_fb"
+                android:paddingEnd="24dp"
+                android:ems="7"
+                android:gravity="center"
+
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:drawablePadding="12dp"
+                android:drawableStart="@drawable/facebook"
+
+                android:textSize="16sp"
+                android:text="@string/action_facebook"
+                android:textColor="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </FrameLayout>
     </FrameLayout>
+
     <FrameLayout
+        android:onClick="onGoogleSignIn"
         android:layout_marginTop="16dp"
         android:elevation="12dp"
         android:background="@drawable/rounded_rec_btn_red"

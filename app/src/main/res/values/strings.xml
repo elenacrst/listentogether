@@ -29,7 +29,7 @@
     <string name="action_create">Create</string>
     <string name="action_cancel">Cancel</string>
     <string name="hint_room_icon">Thumbnail</string>
-    <string name="msg_complete_fields">Please complete all of the fields.</string>
+    <string name="msg_complete_fields">Please complete all fields</string>
     <string name="hint_message">Write your message...</string>
 
     <string name="item_info">Info</string>
@@ -70,4 +70,13 @@
     <string name="label_city">City</string>
     <string name="label_country">Country</string>
     <string name="label_rooms">Rooms joined</string>
+    <string name="msg_passwords_mismatch">Passwords mismatch</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="msg_login_error">An error occurred while logging in.</string>
+
+    <string name="facebook_app_id">442608422990980</string>
+    <string name="fb_login_protocol_scheme">fb442608422990980</string>
+    <string name="msg_about">The app\'s purpose is stress relieving by listening to music and talking with friends. Let yourself discover new tracks and have fun with other people around the world.</string>
+    <string name="title_my_rooms">My rooms</string>
 </resources>

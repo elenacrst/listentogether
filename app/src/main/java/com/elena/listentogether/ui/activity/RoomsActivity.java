@@ -1,35 +1,50 @@
 package com.elena.listentogether.ui.activity;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.elena.listentogether.utils.ImageEncodingUtils;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elena.listentogether.R;
 import com.elena.listentogether.base.App;
-import com.elena.listentogether.data.local.entity.ListenEntity;
-import com.elena.listentogether.data.local.entity.RoomEntity;
-import com.elena.listentogether.data.local.entity.UserEntity;
+import com.elena.listentogether.model.local.entity.ListenEntity;
+import com.elena.listentogether.model.local.entity.RoomEntity;
+import com.elena.listentogether.model.local.entity.UserEntity;
 import com.elena.listentogether.ui.adapter.RoomListener;
 import com.elena.listentogether.ui.adapter.RoomsAdapter;
 import com.elena.listentogether.ui.custom.dialog.SearchCallback;
@@ -39,10 +54,11 @@ import com.elena.listentogether.ui.viewmodel.room.RoomViewModel;
 import com.elena.listentogether.utils.ConnectivityUtils;
 import com.elena.listentogether.utils.Constants;
 import com.elena.listentogether.utils.SharedPrefUtils;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -53,25 +69,33 @@ public class RoomsActivity extends AppCompatActivity implements RoomListener, Se
 
     private TextView mCreateRoomTextView;
     private FloatingActionButton mCreateRoomFab;
-    private ConstraintLayout mRoomsContainer;
+    private LinearLayout mRoomsContainer;
     private RecyclerView mRoomsRecyclerView;
     private ImageView mSearchButton;
     private ConstraintLayout mListContainer;
     private LinearLayout mNoInternetContainer;
    // private NavigationView mNavigationView;
-    private TextView mProfileTextView, mMyRoomsTextView, mAllRoomsTextView, mSettingsTextView
-            , mLogoutTextView;
+    private TextView mProfileTextView, mMyRoomsTextView, mAllRoomsTextView, mSettingsTextView, mLogoutTextView;
     private CircleImageView mAvatarImageView;
     private TextView mUsernameTextView, mEmailTextView;
 
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private NavigationView mNavigationView;
+    private Toolbar mToolbar;
+    private TextView mTitleTextView;
+
     private List<RoomEntity> mRoomList = new ArrayList<>();
     private RoomsAdapter mAdapter;
+    private SharedPrefUtils mSharedPrefUtils;
+    private int mRetrievedListensCount;
 
     @Inject
     Retrofit mRetrofit;
     private RoomViewModel mRoomViewModel;
     private ListenViewModel mListenViewModel;
     private boolean mIsUserRooms;
+    private GoogleSignInClient mGoogleSignInClient;
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -96,30 +120,46 @@ public class RoomsActivity extends AppCompatActivity implements RoomListener, Se
         findViews();
         setupGradient();
         setupRecyclerView();
+        setupDrawerToggle();
         mSearchButton.setOnClickListener(mOnClickListener);
         mCreateRoomFab.setOnClickListener(mOnClickListener);
 
         if (ConnectivityUtils.isConnected(this)){
             mListContainer.setVisibility(View.VISIBLE);
-            mNoInternetContainer.setVisibility(View.GONE);//todo add this container to any activity and show it if there s no connection
+            mNoInternetContainer.setVisibility(View.GONE);//fixme add this container to any activity and show it if there s no connection
         }else{
             mListContainer.setVisibility(View.GONE);
             mNoInternetContainer.setVisibility(View.VISIBLE);
         }
 
-        SharedPrefUtils sharedPrefUtils = new SharedPrefUtils(this);
-        if (!TextUtils.isEmpty(sharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_AVATAR, ""))){
-            Picasso.get().load(sharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_AVATAR, ""))
-                    .into(mAvatarImageView);
+        mSharedPrefUtils = new SharedPrefUtils(this);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+    }
+
+    private void populateDrawer() {
+        mUsernameTextView.setText((TextUtils.isEmpty(mSharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_USERNAME,""))?
+                (!TextUtils.isEmpty(getIntent().getStringExtra("username"))?getIntent().getStringExtra("username"):"No username"):
+                mSharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_USERNAME, "")));
+        mEmailTextView.setText((TextUtils.isEmpty(mSharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_EMAIL,""))?
+                (!TextUtils.isEmpty(getIntent().getStringExtra("email"))?getIntent().getStringExtra("email"):"No email"):
+                mSharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_EMAIL, "")));
+        if (!TextUtils.isEmpty(mSharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_AVATAR, ""))){
+            ImageEncodingUtils.decodeBase64AndSetImage(mSharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_AVATAR, ""), mAvatarImageView);
         }
+    }
 
-        mUsernameTextView.setText(!TextUtils.isEmpty(sharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_USERNAME, "No username"))?
-                sharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_USERNAME, "No username"):
-                "No username");
-        mEmailTextView.setText(!TextUtils.isEmpty(sharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_EMAIL, "No email"))?
-                sharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_EMAIL, "No email"):
-                "No email");
+    private void setupDrawerToggle() {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setElevation(0);
 
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,R.string.open, R.string.close);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
     }
 
     private void setupRecyclerView() {
@@ -183,6 +223,11 @@ public class RoomsActivity extends AppCompatActivity implements RoomListener, Se
         mAvatarImageView = findViewById(R.id.image_avatar);
         mUsernameTextView = findViewById(R.id.text_username);
         mEmailTextView = findViewById(R.id.text_email);
+
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mNavigationView = findViewById(R.id.navigation_drawer);
+        mToolbar = findViewById(R.id.toolbar);
+        mTitleTextView = findViewById(R.id.text_title);
     }
 
     private void showSearchDialog(){
@@ -195,36 +240,34 @@ public class RoomsActivity extends AppCompatActivity implements RoomListener, Se
         final View deleteDialogView = factory.inflate(R.layout.dialog_create_room, null);
         final AlertDialog deleteDialog = new AlertDialog.Builder(this).create();
         EditText editName = deleteDialogView.findViewById(R.id.edit_room_name);
-      //  EditText editPass = deleteDialogView.findViewById(R.id.edit_room_password);
         EditText editIcon = deleteDialogView.findViewById(R.id.edit_room_icon);
-        //RadioButton radioYoutube = deleteDialogView.findViewById(R.id.radio_youtube);
-       // RadioButton radioSpotify = deleteDialogView.findViewById(R.id.radio_spotify);
         deleteDialog.setView(deleteDialogView);
         deleteDialogView.findViewById(R.id.btn_create).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (TextUtils.isEmpty(editName.getText()) ||
-        //                TextUtils.isEmpty(editPass.getText()) ||
                         TextUtils.isEmpty(editIcon.getText())){
-                    Toast.makeText(RoomsActivity.this, R.string.msg_complete_fields, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RoomsActivity.this, R.string.msg_complete_fields,
+                            Toast.LENGTH_SHORT).show();
                     return;
                 }
                 RoomEntity roomEntity = new RoomEntity();
                 SharedPrefUtils sharedPrefUtils = new SharedPrefUtils(RoomsActivity.this);
                 UserEntity userEntity = new UserEntity();
                 userEntity.setId(sharedPrefUtils.getLong(SharedPrefUtils.KEY_PROFILE_ID));
-                roomEntity.setAuthor(userEntity);//todo change author here & in backend to 'dj' = player who's the next one to choose a track
+                roomEntity.setAuthor(userEntity);
                 roomEntity.setSource( Constants.SOURCE_YOUTUBE );
-          //      roomEntity.setPassword(editPass.getText().toString());
                 roomEntity.setIconPath(editIcon.getText().toString());
                 roomEntity.setName(editName.getText().toString());
-
+                roomEntity.setMembersCount(1);
+                roomEntity.setCreationDate(System.currentTimeMillis());
+                roomEntity.setSongsCount(0);
                 mRoomViewModel.insertRoom(RoomsActivity.this,roomEntity);
-
                 deleteDialog.dismiss();
-
-                Intent openRoomDetailActivity = new Intent(RoomsActivity.this,RoomDetailActivity.class);
+                Intent openRoomDetailActivity = new Intent(RoomsActivity.this
+                        ,RoomDetailActivity.class);
                 openRoomDetailActivity.putExtra(RoomDetailActivity.EXTRA_ROOM, roomEntity);
+                openRoomDetailActivity.putExtra("new",true);
                 startActivity(openRoomDetailActivity);
             }
         });
@@ -234,7 +277,6 @@ public class RoomsActivity extends AppCompatActivity implements RoomListener, Se
                 deleteDialog.dismiss();
             }
         });
-
         deleteDialog.show();
     }
 
@@ -248,9 +290,13 @@ public class RoomsActivity extends AppCompatActivity implements RoomListener, Se
         mListenViewModel.setRetrofit(mRetrofit);
     }
 
+    //fixme change author here & in backend to 'dj' = player who's the next one to choose a track
     @Override
     public void onRoomSelected(RoomEntity roomEntity) {
         Intent openRoomDetailsActivity = new Intent(this, RoomDetailActivity.class);
+        UserEntity author = new UserEntity();
+        author.setId(roomEntity.getAuthor().getId());
+        roomEntity.setAuthor(author);
         openRoomDetailsActivity.putExtra(RoomDetailActivity.EXTRA_ROOM, roomEntity);
         startActivity(openRoomDetailsActivity);
         ListenEntity listenEntity = new ListenEntity();
@@ -268,35 +314,138 @@ public class RoomsActivity extends AppCompatActivity implements RoomListener, Se
     }
 
     public void onLogout(View view) {
-
+        SharedPrefUtils sharedPrefUtils = new SharedPrefUtils(this);
+        switch (sharedPrefUtils.getString(SharedPrefUtils.KEY_PROFILE_TYPE, Constants.PROFILE_TYPE_BASIC)){
+            case Constants.PROFILE_TYPE_GOOGLE:
+                mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        //On Succesfull signout we navigate the user back to LoginActivity
+                        logout();
+                    }
+                });
+                break;
+            case Constants.PROFILE_TYPE_FACEBOOK:
+                LoginManager.getInstance().logOut();
+                logout();
+                break;
+            default:
+                logout();
+                break;
+        }
     }
 
-    public void onSettings(View view) {//todo selectors
+    private void logout() {
+        SharedPrefUtils sharedPrefUtils = new SharedPrefUtils(this);
+        sharedPrefUtils.clear();
+        Intent intent=new Intent(RoomsActivity.this,MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    public void onSettings(View view) {//fixme selectors
         Intent openSettingsActivity = new Intent(this, SettingsActivity.class);
         startActivity(openSettingsActivity);
     }
 
     public void onAllRooms(View view) {
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        mTitleTextView.setText(getString(R.string.title_all_rooms));
+        mSearchButton.setVisibility(View.VISIBLE);
         mIsUserRooms = false;
         mRoomViewModel.loadRooms(this);
         mRoomViewModel.getmRooms().observe(this, new Observer<List<RoomEntity>>() {
             @Override
             public void onChanged(@Nullable List<RoomEntity> roomEntities) {
-                mRoomList = roomEntities;
+                mRoomList = new ArrayList<>();
+                if (roomEntities == null){
+                    setupRecyclerView();
+                    return;
+                }
+                for (RoomEntity r: roomEntities){
+                    if (r != null){
+                        mRoomList.add(r);
+                    }
+                }
                 setupRecyclerView();
+                if (mRoomList == null || mRoomList.size() == 0){
+                    return;
+                }
+
+                mRetrievedListensCount = 0;
+                Map<Long, List<UserEntity>> usersInRoom = new HashMap<>();
+                for (RoomEntity roomEntity : mRoomList){
+                    mListenViewModel.loadListens(RoomsActivity.this, roomEntity.getId());
+                    mListenViewModel.getmListens().observe(RoomsActivity.this, new Observer<List<ListenEntity>>() {
+                        @Override
+                        public void onChanged(List<ListenEntity> listenEntities) {
+                            mRetrievedListensCount++;
+                            if (listenEntities == null || listenEntities.size() == 0){
+                                return;
+                            }
+                            List<UserEntity> users = new ArrayList<>();
+                            for (ListenEntity l: listenEntities){
+                                users.add(l.getUser());
+                            }
+                            usersInRoom.put(listenEntities.get(0).getRoom().getId(), users);
+                            if (mRetrievedListensCount == roomEntities.size()){
+                                mAdapter.setUsersInRooms(usersInRoom);
+                            }
+                        }
+                    });
+                }
+
             }
         });
     }
 
     public void onMyRooms(View view) {
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        mTitleTextView.setText(getString(R.string.title_my_rooms));
+        mSearchButton.setVisibility(View.INVISIBLE);
         mIsUserRooms = true;
         SharedPrefUtils sharedPrefUtils = new SharedPrefUtils(this);
         mRoomViewModel.loadUserRooms(this,sharedPrefUtils.getLong(SharedPrefUtils.KEY_PROFILE_ID));
         mRoomViewModel.getmUserRooms().observe(this, new Observer<List<RoomEntity>>() {
             @Override
             public void onChanged(@Nullable List<RoomEntity> roomEntities) {
-                mRoomList = roomEntities;
+                mRoomList = new ArrayList<>();
+                if (roomEntities == null){
+                    setupRecyclerView();
+                    return;
+                }
+                for (RoomEntity r: roomEntities){
+                    if (r != null){
+                        mRoomList.add(r);
+                    }
+                }
                 setupRecyclerView();
+                if (mRoomList == null || mRoomList.size() == 0){
+                    return;
+                }
+
+                mRetrievedListensCount = 0;
+                Map<Long, List<UserEntity>> usersInRoom = new HashMap<>();
+                for (RoomEntity roomEntity : mRoomList){
+                    mListenViewModel.loadListens(RoomsActivity.this, roomEntity.getId());
+                    mListenViewModel.getmListens().observe(RoomsActivity.this, new Observer<List<ListenEntity>>() {
+                        @Override
+                        public void onChanged(List<ListenEntity> listenEntities) {
+                            mRetrievedListensCount++;
+                            if (listenEntities == null || listenEntities.size() == 0){
+                                return;
+                            }
+                            List<UserEntity> users = new ArrayList<>();
+                            for (ListenEntity l: listenEntities){
+                                users.add(l.getUser());
+                            }
+                            usersInRoom.put(listenEntities.get(0).getRoom().getId(), users);
+                            if (mRetrievedListensCount == roomEntities.size()){
+                                mAdapter.setUsersInRooms(usersInRoom);
+                            }
+                        }
+                    });
+                }
             }
         });
     }
@@ -310,36 +459,48 @@ public class RoomsActivity extends AppCompatActivity implements RoomListener, Se
     protected void onResume() {
         super.onResume();
         setupViewModel();
+        populateDrawer();
         if(mIsUserRooms){
-            SharedPrefUtils sharedPrefUtils = new SharedPrefUtils(this);
+            /*SharedPrefUtils sharedPrefUtils = new SharedPrefUtils(this);
             mRoomViewModel.loadUserRooms(this, sharedPrefUtils.getLong(SharedPrefUtils.KEY_PROFILE_ID));
             mRoomViewModel.getmUserRooms().observe(this, new Observer<List<RoomEntity>>() {
                 @Override
                 public void onChanged(@Nullable List<RoomEntity> roomEntities) {
-                    if (roomEntities != null) {
+                  //  if (roomEntities != null) {
                         mRoomList = new ArrayList<>(roomEntities);
-                    }else{
+                   /* }else{
                         mRoomList = null;
-                    }
+                    }/
                     setupRecyclerView();
                 }
-            });
+            });*/
+            onMyRooms(null);
         }else{
-            mRoomViewModel.loadRooms(this);
+            onAllRooms(null);
+        /*    mRoomViewModel.loadRooms(this);
             mRoomViewModel.getmRooms().observe(this, new Observer<List<RoomEntity>>() {
                 @Override
                 public void onChanged(@Nullable List<RoomEntity> roomEntities) {
-                    if (roomEntities != null) {
+                   // if (roomEntities != null) {
                         mRoomList = new ArrayList<>(roomEntities);
-                    }else{
+                   /* }else{
                         mRoomList = null;
-                    }
+                    }*
                     setupRecyclerView();
                 }
-            });
+            });*/
         }
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home){
+            Log.wtf("onclick", "drawer "+mDrawerLayout.isDrawerOpen(GravityCompat.START));
+            mDrawerLayout.openDrawer(GravityCompat.START);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
-//todo password for room
+//fixme password for room
 

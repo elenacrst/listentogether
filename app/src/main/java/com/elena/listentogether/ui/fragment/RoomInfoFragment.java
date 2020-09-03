@@ -1,12 +1,9 @@
 package com.elena.listentogether.ui.fragment;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.elena.listentogether.R;
-import com.elena.listentogether.data.local.entity.RoomEntity;
-import com.elena.listentogether.data.local.entity.VideoItem;
-import com.elena.listentogether.ui.activity.RoomDetailActivity;
-import com.elena.listentogether.ui.adapter.VideosAdapter;
-import com.elena.listentogether.youtube.YoutubeSearchListener;
+import com.elena.listentogether.model.local.entity.RoomEntity;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
+import java.util.Calendar;
+import java.util.Locale;
+
 
 public class RoomInfoFragment extends Fragment{
     private static final String ARG_ROOM = "ROOM";
@@ -70,13 +65,17 @@ public class RoomInfoFragment extends Fragment{
                 @Override
                 public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
                     exception.printStackTrace();
-                    Picasso.get().load("https://www.southwales.ac.uk/media/images/Music_and_Sound_End_of.91ae7805.fill-900x682.format-jpeg.jpg")
+                    Picasso.get().load(R.drawable.placeholder_room)
                             .placeholder(R.drawable.placeholder_room).into(mThumbnailImageView);
                 }
             });
-            builder.build().load(mRoom.getIconPath()).into(mThumbnailImageView);
+            builder.build().load(mRoom.getIconPath()).placeholder(R.drawable.placeholder_room).into(mThumbnailImageView);
             mSongsCountTextView.setText(mRoom.getSongsCount()+"");
-            mCreationDateTextView.setText(mRoom.getCreationDate()+"");
+            //Date date = new Date(mRoom.getCreationDate().getTime ());
+            Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+            cal.setTimeInMillis(mRoom.getCreationDate());
+            String date = DateFormat.format("EEE, d MMM yyyy", cal).toString();
+            mCreationDateTextView.setText(date);
         }
         return view;
     }
@@ -88,4 +87,7 @@ public class RoomInfoFragment extends Fragment{
         mThumbnailImageView = view.findViewById(R.id.image_thumbnail);
     }
 
+    public RoomEntity getmRoom() {
+        return mRoom;
+    }
 }

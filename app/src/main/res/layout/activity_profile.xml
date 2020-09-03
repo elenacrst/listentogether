@@ -5,7 +5,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:focusableInTouchMode="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
@@ -18,7 +19,7 @@
             android:background="@color/blueIndicator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 app:layout_constraintTop_toTopOf="parent"
                 tools:title="@string/title_profile"
                 app:titleTextColor="@android:color/white"
@@ -41,7 +42,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_alignParentTop="true"/>
 
-                <android.support.design.widget.FloatingActionButton
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:onClick="onTakePhoto"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="96dp"
@@ -66,7 +67,7 @@
                 android:textColor="@android:color/white"
                 android:letterSpacing="-0.03"
                 android:lineSpacingExtra="3sp"
-                tools:text="Ronald McDonald"
+                tools:text="Ron Don"
                 />
             <TextView
                 android:id="@+id/text_email"
@@ -78,7 +79,7 @@
                 android:textColor="@color/greyTextProfile"
                 android:letterSpacing="-0.03"
                 android:lineSpacingExtra="2sp"
-                tools:text="elena.gabriela96@gmail.com"
+                tools:text="ron.don@gmail.com"
                 />
         </LinearLayout>
 
@@ -369,5 +370,5 @@
             app:layout_constraintBottom_toBottomOf="@id/text_phone"
             android:layout_width="18dp"
             android:layout_height="18dp" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

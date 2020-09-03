@@ -1,17 +1,16 @@
 package com.elena.listentogether.utils;
 
-import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.RoundRectShape;
-import android.support.annotation.ColorRes;
-import android.support.annotation.DimenRes;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.util.DisplayMetrics;
+import androidx.annotation.ColorRes;
+import androidx.annotation.DimenRes;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,11 +76,8 @@ public class ViewUtils {
 
         return drawable;
 
-    }//todo try this for rooms activity red shadow
+    }//fixme try this for rooms activity red shadow
 
-    public static float convertDpToPixel(float dp, Context context){
-        return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-    }
 
     public static <T> T findViewByClass(@NonNull final View rootView, @NonNull final Class<T> clazz) {
         final Class<?> viewClass = rootView.getClass();

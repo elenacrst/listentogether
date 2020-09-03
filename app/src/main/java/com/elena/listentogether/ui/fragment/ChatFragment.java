@@ -1,13 +1,13 @@
 package com.elena.listentogether.ui.fragment;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,18 +17,12 @@ import android.widget.FrameLayout;
 
 import com.elena.listentogether.R;
 import com.elena.listentogether.base.App;
-import com.elena.listentogether.data.local.entity.MessageEntity;
-import com.elena.listentogether.data.local.entity.RoomEntity;
-import com.elena.listentogether.data.local.entity.UserEntity;
-import com.elena.listentogether.data.local.entity.VideoItem;
-import com.elena.listentogether.ui.activity.RoomDetailActivity;
+import com.elena.listentogether.model.local.entity.MessageEntity;
+import com.elena.listentogether.model.local.entity.RoomEntity;
+import com.elena.listentogether.model.local.entity.UserEntity;
 import com.elena.listentogether.ui.adapter.MessagesAdapter;
-import com.elena.listentogether.ui.adapter.VideosAdapter;
-import com.elena.listentogether.ui.viewmodel.listen.ListenViewModel;
 import com.elena.listentogether.ui.viewmodel.message.MessageViewModel;
-import com.elena.listentogether.ui.viewmodel.room.RoomViewModel;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -95,6 +89,7 @@ public class ChatFragment extends Fragment {
                     messageEntity.setRoom(roomEntity);
                     UserEntity userEntity = new UserEntity();
                     userEntity.setId(mUserId);
+                    //userEntity.setAvatar("");
                     messageEntity.setUser(userEntity);
                     mMessageViewModel.insertMessage(getContext(), messageEntity);
                     mMessageEditText.setText("");

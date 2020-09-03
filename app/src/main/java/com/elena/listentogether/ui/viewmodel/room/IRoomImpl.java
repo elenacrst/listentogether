@@ -1,13 +1,12 @@
 package com.elena.listentogether.ui.viewmodel.room;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.widget.Toast;
 
-import com.elena.listentogether.data.local.entity.RoomEntity;
-import com.elena.listentogether.data.local.entity.UserEntity;
-import com.elena.listentogether.data.remote.ApiCallInterface;
+import com.elena.listentogether.model.local.entity.RoomEntity;
+import com.elena.listentogether.model.remote.ApiCallInterface;
 
 import java.util.List;
 
@@ -94,7 +93,7 @@ public class IRoomImpl implements IRoom {
                 if (response.body() != null){
                     liveData.setValue(response.body());
                     //  UserViewModel.handleResponse(response.body(), context, new MainActivity());
-                    //todo err message when there s no internet when logging in
+                    //fixme err message when there s no internet when logging in
                 }
             }
 
@@ -117,7 +116,7 @@ public class IRoomImpl implements IRoom {
               //  if (response.body() != null){
                     liveData.setValue(response.body());
                     //  UserViewModel.handleResponse(response.body(), context, new MainActivity());
-                    //todo err message when there s no internet when logging in
+                    //fixme err message when there s no internet when logging in
                 //}
             }
 

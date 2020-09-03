@@ -1,11 +1,11 @@
 package com.elena.listentogether.ui.viewmodel.user;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
-import com.elena.listentogether.data.local.entity.UserEntity;
-import com.elena.listentogether.data.remote.ApiCallInterface;
+import com.elena.listentogether.model.local.entity.UserEntity;
+import com.elena.listentogether.model.remote.ApiCallInterface;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,7 +34,7 @@ public class IUserImpl implements IUser {
                 if (response.body() != null){
                     liveData.setValue(response.body());
                   //  UserViewModel.handleResponse(response.body(), context, new MainActivity());
-                    //todo err message when there s no internet when logging in
+                    //fixme err message when there s no internet when logging in
                 }
             }
 
@@ -55,11 +55,11 @@ public class IUserImpl implements IUser {
             @Override
             public void onResponse(@NonNull Call<Integer> call,
                                    @NonNull Response<Integer> response) {
-                if (response.body() != null){
+              //  if (response.body() != null){
                     liveData.setValue(response.body());
                     //  UserViewModel.handleResponse(response.body(), context, new MainActivity());
-                    //todo err message when there s no internet when logging in
-                }
+                    //fixme err message when there s no internet when logging in
+               // }
             }
 
             @Override
@@ -81,7 +81,7 @@ public class IUserImpl implements IUser {
                                    @NonNull Response<String> response) {
                 if (response.body() != null){
                     //  UserViewModel.handleResponse(response.body(), context, new MainActivity());
-                    //todo err message when there s no internet
+                    //fixme err message when there s no internet
                     result.setValue(response.body());
                 }
             }
@@ -104,7 +104,7 @@ public class IUserImpl implements IUser {
                                    @NonNull Response<Void> response) {
                 if (response.body() != null){
                     //  UserViewModel.handleResponse(response.body(), context, new MainActivity());
-                    //todo err message when there s no internet
+                    //fixme err message when there s no internet
                 }
             }
 
@@ -125,7 +125,7 @@ public class IUserImpl implements IUser {
                                    @NonNull Response<Void> response) {
                 if (response.body() != null){
                     //  UserViewModel.handleResponse(response.body(), context, new MainActivity());
-                    //todo err message when there s no internet
+                    //fixme err message when there s no internet
                 }
             }
 
@@ -146,7 +146,7 @@ public class IUserImpl implements IUser {
                                    @NonNull Response<Void> response) {
                 if (response.body() != null){
                     //  UserViewModel.handleResponse(response.body(), context, new MainActivity());
-                    //todo err message when there s no internet
+                    //fixme err message when there s no internet
                 }
             }
 
@@ -156,5 +156,29 @@ public class IUserImpl implements IUser {
                 t.printStackTrace();
             }
         });
+    }
+
+    @Override
+    public MutableLiveData<UserEntity> insertUser(Context context, UserEntity userEntity) {
+        MutableLiveData<UserEntity> liveData = new MutableLiveData<>();
+        Call<UserEntity> call = mRetrofitService.insertUser(userEntity);
+        call.enqueue(new Callback<UserEntity>() {
+            @Override
+            public void onResponse(@NonNull Call<UserEntity> call,
+                                   @NonNull Response<UserEntity> response) {
+                if (response.body() != null){
+                    liveData.setValue(response.body());
+                  //  Toast.makeText(context, response.body(), Toast.LENGTH_SHORT).show();
+                }else{
+                    liveData.setValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<UserEntity> call, @NonNull Throwable t) {
+                t.printStackTrace();
+            }
+        });
+        return liveData;
     }
 }

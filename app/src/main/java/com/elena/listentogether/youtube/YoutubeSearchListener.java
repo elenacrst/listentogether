@@ -1,6 +1,6 @@
 package com.elena.listentogether.youtube;
 
-import com.elena.listentogether.data.local.entity.VideoItem;
+import com.elena.listentogether.model.local.entity.VideoItem;
 
 import java.util.List;
 

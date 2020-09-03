@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         tools:background="@color/lightBlueRooms"
@@ -13,61 +15,85 @@
         android:layout_height="match_parent"
         android:id="@+id/container_rooms"
         tools:context=".ui.activity.RoomsActivity">
-        <TextView
-            android:textStyle="bold"
-            android:textSize="@dimen/toolbar_title_text_size"
-            android:layout_marginTop="16dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="@string/title_all_rooms"
-            android:textColor="@android:color/white"
-            android:layout_width="wrap_content"
-            android:id="@+id/text_title"
-            android:layout_height="wrap_content" />
-        <ImageButton
-            android:background="@null"
-            android:src="@drawable/baseline_menu_white_24"
-            android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@id/text_title"
-            app:layout_constraintTop_toTopOf="@+id/text_title"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_width="24dp"
-            android:layout_height="24dp" />
-        <ImageButton
-            android:id="@+id/btn_search"
-            android:tint="@android:color/white"
-            android:background="@null"
-            android:src="@drawable/baseline_search_black_24"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@id/text_title"
-            app:layout_constraintTop_toTopOf="@+id/text_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="24dp"
-            android:layout_height="24dp" />
+        <com.google.android.material.appbar.AppBarLayout
+            android:elevation="0dp"
+            android:stateListAnimator="@null"
+            android:id="@+id/appbar"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <androidx.constraintlayout.widget.ConstraintLayout
+
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_marginEnd="24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/toolbar_title_text_size"
+                        app:layout_constraintRight_toRightOf="@id/btn_search"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:text="@string/title_all_rooms"
+                        android:textColor="@android:color/white"
+                        android:layout_width="wrap_content"
+                        android:id="@+id/text_title"
+                        android:layout_height="wrap_content" />
+                    <!--<ImageButton-->
+                        <!--android:id="@+id/btn_menu"-->
+                        <!--android:background="@null"-->
+                        <!--android:src="@drawable/baseline_menu_white_24"-->
+                        <!--android:layout_marginStart="16dp"-->
+                        <!--app:layout_constraintBottom_toBottomOf="@id/text_title"-->
+                        <!--app:layout_constraintTop_toTopOf="@+id/text_title"-->
+                        <!--app:layout_constraintStart_toStartOf="parent"-->
+                        <!--android:layout_width="24dp"-->
+                        <!--android:layout_height="24dp" />-->
+                    <ImageButton
+                        android:id="@+id/btn_search"
+                        android:tint="@android:color/white"
+                        android:background="@null"
+                        android:src="@drawable/baseline_search_black_24"
+                        android:layout_marginEnd="24dp"
+                        app:layout_constraintBottom_toBottomOf="@id/text_title"
+                        app:layout_constraintTop_toTopOf="@+id/text_title"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
         <FrameLayout
 
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@id/text_title"
             android:layout_width="match_parent"
-            android:layout_height="0dp">
-            <android.support.constraint.ConstraintLayout
+            android:layout_height="match_parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/container_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     tools:itemCount="5"
                     android:layout_marginLeft="24dp"
                     android:layout_marginRight="24dp"
                     tools:listitem="@layout/item_room"
                     android:id="@+id/recyclerview_rooms"
                     android:layout_width="match_parent"
-                    android:paddingBottom="12dp"
+                    android:paddingBottom="56dp"
                     app:layout_constraintTop_toTopOf="parent"
                     android:layout_height="0dp"/>
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:background="@drawable/bg_create_room_label"
                     android:id="@+id/text_create_room"
                     android:gravity="center"
@@ -82,7 +108,7 @@
                     android:layout_width="0dp"
                     android:elevation="8dp"
                     android:layout_height="56dp" />
-                <android.support.design.widget.FloatingActionButton
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
                     app:layout_constraintEnd_toEndOf="parent"
                     android:elevation="8dp"
                     android:layout_marginEnd="20dp"
@@ -96,13 +122,12 @@
                     android:tint="@android:color/white"
                     android:layout_width="56dp"
                     android:layout_height="56dp" />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <include
                 android:id="@+id/container_no_internet"
                 layout="@layout/no_internet"/>
         </FrameLayout>
-    </android.support.constraint.ConstraintLayout>
-
+    </LinearLayout>
     <include layout="@layout/navigation_drawer"
         android:id="@+id/navigation_drawer"/>
-</android.support.v4.widget.DrawerLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

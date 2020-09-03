@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="12dp"
@@ -17,14 +18,12 @@
         android:src="@color/darkBlueRoomBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:id="@+id/image_avatar"
-        />
+        android:id="@+id/image_avatar" />
     <TextView
         android:id="@+id/text_content"
         app:layout_constraintEnd_toEndOf="parent"
         android:textSize="16sp"
         android:textColor="@android:color/white"
-        android:letterSpacing="0.05"
         android:lineSpacingExtra="6sp"
         tools:text="That's so cool, I wish one day they come here in Galati"
         android:layout_marginStart="12dp"
@@ -32,13 +31,11 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="0dp"
         android:layout_height="wrap_content" />
-    <!--todo scroll recyclerview on notification for message-->
     <TextView
         android:id="@+id/text_date"
         app:layout_constraintEnd_toEndOf="parent"
         android:textSize="14sp"
         android:textColor="@color/whiteTextDate"
-        android:letterSpacing="0.05"
         android:lineSpacingExtra="6sp"
         tools:text="Nov 7, 09:18"
         android:layout_marginStart="12dp"
@@ -46,4 +43,21 @@
         app:layout_constraintTop_toBottomOf="@+id/text_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content" />
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--todo scroll recyclerview on notification for message-->

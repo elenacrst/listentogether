@@ -1,9 +1,9 @@
 package com.elena.listentogether.ui.viewmodel.user;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.content.Context;
 
-import com.elena.listentogether.data.local.entity.UserEntity;
+import com.elena.listentogether.model.local.entity.UserEntity;
 
 public interface IUser {
     MutableLiveData<UserEntity> findUser(Context context, UserEntity userEntity);
@@ -12,4 +12,6 @@ public interface IUser {
     void updateCity(Context context, Long userId, String city);
     void updateCountry(Context context, Long userId, String country);
     void updatePhone(Context context, Long userId, String phone);
+
+    MutableLiveData<UserEntity> insertUser(Context context, UserEntity userEntity);
 }

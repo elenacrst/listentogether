@@ -20,7 +20,7 @@
             android:layout_height="wrap_content">
             <include
                 layout="@layout/group_settings"/>
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:background="@color/greySetting"
 
                 android:layout_width="match_parent"
@@ -52,7 +52,7 @@
                     android:textColor="@color/greyTextSubtitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
-                <android.support.v7.widget.SwitchCompat
+                <androidx.appcompat.widget.SwitchCompat
                     android:paddingEnd="24dp"
                     android:id="@+id/switch_members"
                     app:thumbTint="@color/blueIndicator"
@@ -89,7 +89,7 @@
                     android:textColor="@color/greyTextSubtitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
-                <android.support.v7.widget.SwitchCompat
+                <androidx.appcompat.widget.SwitchCompat
                     android:paddingEnd="24dp"
                     android:id="@+id/switch_messages"
                     app:thumbTint="@color/blueIndicator"
@@ -136,9 +136,10 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </com.elena.listentogether.ui.custom.expandablelayout.ExpandableLinearLayout>
         <LinearLayout
+            android:onClick="onPrivacyPolicy"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
             android:layout_width="match_parent"
@@ -164,6 +165,7 @@
             android:layout_width="match_parent"
             android:layout_height="0.5dp"/>
         <LinearLayout
+            android:onClick="onAbout"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
             android:layout_width="match_parent"

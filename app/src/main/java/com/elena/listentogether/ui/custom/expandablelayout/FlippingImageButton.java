@@ -3,10 +3,9 @@ package com.elena.listentogether.ui.custom.expandablelayout;
 import android.animation.ObjectAnimator;
 import android.animation.TimeInterpolator;
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v7.widget.AppCompatImageButton;
+import androidx.appcompat.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 
 import com.elena.listentogether.R;

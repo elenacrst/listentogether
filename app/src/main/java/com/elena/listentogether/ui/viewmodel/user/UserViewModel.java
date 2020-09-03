@@ -1,20 +1,14 @@
 package com.elena.listentogether.ui.viewmodel.user;
 
-import android.app.Activity;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MediatorLiveData;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.util.Log;
-import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-import com.elena.listentogether.data.local.entity.UserEntity;
-import com.elena.listentogether.ui.activity.MainActivity;
-
-import javax.inject.Inject;
+import com.elena.listentogether.model.local.entity.UserEntity;
 
 import retrofit2.Retrofit;
 
@@ -60,27 +54,8 @@ public class UserViewModel extends ViewModel {
         );
     }
 
-    /*static void handleResponse(final UserEntity data, final Context context, Activity activity) {
-        activity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Log.wtf("user result","user "+ data.getEmail());
-              //  MainActivity.setupData(data);
-            }
-        });
-
-    }*/
-
-    /*private static void handleError() {
-        Log.wtf("user result","error");
-    }
-
-    public IUser getmIUser() {
-        return mIUser;
-    }*/
-
     public void loadUserRoomsCount(final Context context, Long userId) {
-        mUserData.addSource(
+        mUserRoomsCount.addSource(
                 mIUser.getUserRoomsCount(context, userId), new Observer<Integer>() {
                     @Override
                     public void onChanged(@Nullable Integer data) {
@@ -126,5 +101,14 @@ public class UserViewModel extends ViewModel {
 
     public MediatorLiveData<String> getmUpdateResult() {
         return mUpdateResult;
+    }
+
+    public void insertUser(Context context,UserEntity userEntity){
+        mUserData.addSource(mIUser.insertUser(context, userEntity), new Observer<UserEntity>() {
+            @Override
+            public void onChanged(@Nullable UserEntity userEntity) {
+                mUserData.setValue(userEntity);
+            }
+        });
     }
 }

@@ -1,10 +1,9 @@
 package com.elena.listentogether.ui.viewmodel.message;
 
-import android.arch.lifecycle.MutableLiveData;
+import androidx.lifecycle.MutableLiveData;
 import android.content.Context;
 
-import com.elena.listentogether.data.local.entity.MessageEntity;
-import com.elena.listentogether.data.local.entity.RoomEntity;
+import com.elena.listentogether.model.local.entity.MessageEntity;
 
 import java.util.List;
 

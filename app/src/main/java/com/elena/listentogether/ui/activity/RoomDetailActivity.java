@@ -1,37 +1,33 @@
 package com.elena.listentogether.ui.activity;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
-import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elena.listentogether.R;
 import com.elena.listentogether.base.App;
-import com.elena.listentogether.data.local.entity.ListenEntity;
-import com.elena.listentogether.data.local.entity.MessageEntity;
-import com.elena.listentogether.data.local.entity.RoomEntity;
-import com.elena.listentogether.data.local.entity.UserEntity;
-import com.elena.listentogether.data.local.entity.VideoItem;
+import com.elena.listentogether.model.local.entity.ListenEntity;
+import com.elena.listentogether.model.local.entity.RoomEntity;
+import com.elena.listentogether.model.local.entity.UserEntity;
+import com.elena.listentogether.model.local.entity.VideoItem;
 import com.elena.listentogether.notification.NotificationListener;
 import com.elena.listentogether.notification.NotificationReceiver;
-import com.elena.listentogether.notification.NotificationsService;
 import com.elena.listentogether.ui.adapter.VideoListener;
 import com.elena.listentogether.ui.custom.dialog.SearchCallback;
 import com.elena.listentogether.ui.custom.dialog.SearchDialog;
@@ -43,7 +39,6 @@ import com.elena.listentogether.ui.viewmodel.room.RoomViewModel;
 import com.elena.listentogether.utils.Constants;
 import com.elena.listentogether.utils.SharedPrefUtils;
 import com.elena.listentogether.youtube.YoutubeAsyncTask;
-import com.elena.listentogether.youtube.YoutubeSearchListener;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
@@ -66,6 +61,10 @@ public class RoomDetailActivity extends FragmentActivity
     private static final String TAG_SEARCH_RESULTS_FRAGMENT = "SEARCH_RESULTS_FRAGMENT";
     private static final String TAG_CHAT_FRAGMENT = "CHAT_FRAGMENT";
 
+    private List<String> mFragments = new ArrayList<>();
+    private String mCurrentTagDisplayed;
+    private int mCurrentFragmentIndex;
+
     private BottomNavigationView mNavigationView;
     private SearchResultsFragment mSearchResultsFragment;
     private ImageButton mSearchImageButton;
@@ -81,9 +80,7 @@ public class RoomDetailActivity extends FragmentActivity
     private RoomEntity mCurrentRoom;
     private SharedPrefUtils mSharedPrefUtils;
     private long mCurrentUserId;
-    private List<String> mFragments = new ArrayList<>();
-    private String mCurrentTagDisplayed;
-    private int mCurrentFragmentIndex;
+
     private boolean mIsCurrentUsersTurn;
 
     private BroadcastReceiver mReceiver;
@@ -95,8 +92,8 @@ public class RoomDetailActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_detail);
-        //todo dialog if user doesnt have play services - firebase messaging requires it
-        //todo test members count
+        //fixme dialog if user doesnt have play services - firebase messaging requires it
+
         setupViewModel();
         findViews();
         setupYoutubeFragment();
@@ -106,6 +103,10 @@ public class RoomDetailActivity extends FragmentActivity
 
         if (getIntent().getParcelableExtra(EXTRA_ROOM) != null){
             mCurrentRoom = getIntent().getParcelableExtra(EXTRA_ROOM);
+            if (getIntent().hasExtra("new")){
+                mIsCurrentUsersTurn = true;
+            }
+            onRoomInfoRefreshed(mCurrentRoom);
             mRoomTitleTextView.setText(mCurrentRoom.getName());
             FirebaseMessaging.getInstance().subscribeToTopic("room"+mCurrentRoom.getId());
 
@@ -136,7 +137,8 @@ public class RoomDetailActivity extends FragmentActivity
                 @Override
                 public void onChanged(@Nullable RoomEntity roomEntity) {
                     mCurrentRoom = roomEntity;
-                    mIsCurrentUsersTurn = roomEntity != null && roomEntity.getAuthor() != null && mCurrentUserId == roomEntity.getAuthor().getId();
+                    //mIsCurrentUsersTurn = roomEntity != null && roomEntity.getAuthor() != null &&
+                      //      mCurrentUserId == roomEntity.getAuthor().getId();
                    // mSharedPrefUtils.saveBoolean(SharedPrefUtils.KEY_CURRENT_USER_TURN, mIsCurrentUsersTurn);
                     onRoomInfoRefreshed(roomEntity);
 
@@ -149,23 +151,19 @@ public class RoomDetailActivity extends FragmentActivity
                 }
             });
         }
-//todo request load rooms in onresume , rooms activity [last song gets modified]
-        //todo thumbnail in rooms adapter
     }
+
 
     private void setupYoutubeFragment() {
         YouTubePlayerSupportFragment youTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();
-
         youTubePlayerFragment.initialize("DEVELOPER_KEY", new YouTubePlayer.OnInitializedListener() {
-
             @Override
-            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
-
+            public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player,
+                                                boolean wasRestored) {
                 if (!wasRestored) {
                     mPlayer = player;
-                   //todo uncomm mPlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
+                    mPlayer.setPlayerStyle(YouTubePlayer.PlayerStyle.CHROMELESS);
                 }
-
             }
 
             @Override
@@ -207,9 +205,6 @@ public class RoomDetailActivity extends FragmentActivity
         ((App) getApplication()).getNetComponent().injectRoomDetails(this);//dagger
         mListenViewModel.setRetrofit(mRetrofit);
 
-        mListenViewModel = ViewModelProviders.of(this).get(ListenViewModel.class);
-        mListenViewModel.setRetrofit(mRetrofit);
-
         mRoomViewModel = ViewModelProviders.of(this)
                 .get(RoomViewModel.class);
         mRoomViewModel.setRetrofit(mRetrofit);
@@ -224,7 +219,6 @@ public class RoomDetailActivity extends FragmentActivity
     }
 
     public void createOrShowFragment(Fragment fragment, String tag) {
-
         synchronized(this) {
             if (mFragments.indexOf(tag) >= 0) {
                 String s = mFragments.get(mCurrentFragmentIndex);
@@ -236,7 +230,8 @@ public class RoomDetailActivity extends FragmentActivity
             }
             mFragments.add(tag);
             mCurrentFragmentIndex = mFragments.size() - 1;
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getSupportFragmentManager()
+                    .beginTransaction();
             transaction.add(R.id.container, fragment, tag);
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             transaction.setCustomAnimations(android.R.anim.fade_in,
@@ -254,7 +249,6 @@ public class RoomDetailActivity extends FragmentActivity
             if (!mFragments.contains(tag)) {
                 return;
             }
-
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
             if (fragment != null) {
                 getSupportFragmentManager().beginTransaction().remove(fragment).commit();
@@ -268,10 +262,9 @@ public class RoomDetailActivity extends FragmentActivity
             }
         }
     }
-
     private void bringFragmentToTop(String tag) {
         mCurrentTagDisplayed = tag;
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         for(int i = 0; i < mFragments.size(); i++) {
@@ -309,7 +302,7 @@ public class RoomDetailActivity extends FragmentActivity
                 createOrShowFragment(chatFragment, TAG_CHAT_FRAGMENT);
                 return true;
             case R.id.action_leave:
-                //todo show dialog
+                //fixme show dialog
                 ListenEntity listenEntity = new ListenEntity();
                 RoomEntity roomEntity = new RoomEntity();
                 roomEntity.setId(mCurrentRoom.getId());
@@ -382,11 +375,6 @@ public class RoomDetailActivity extends FragmentActivity
                 mSharedPrefUtils.saveBoolean(SharedPrefUtils.KEY_CURRENT_USER_TURN, true);
             }
             if (mPlayer != null &&  videoId != null){
-                /*if (mPlayer.isPlaying()){
-                    mPlayer.release();
-                }*/
-             //   mPlayer.cueVideo(videoId);
-             //   mPlayer.cueVideo(videoId);
                 mPlayer.loadVideo(videoId);
                 mPlayer.play();
                 mPlayer.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
@@ -425,6 +413,8 @@ public class RoomDetailActivity extends FragmentActivity
             }
         }
 
+       // mRoomViewModel.loadRoom(this, mCurrentRoom.getId());
+
     }
 
     public void onSearchButtonClick(View view) {
@@ -462,13 +452,22 @@ public class RoomDetailActivity extends FragmentActivity
 
     @Override
     public void onRoomInfoRefreshed(RoomEntity roomEntity) {
+        boolean isNewUser = true;
+        if (mRoomInfoFragment != null){
+            if (mRoomInfoFragment.getmRoom() != null &&
+                    roomEntity.getMembersCount() == mRoomInfoFragment.getmRoom().getMembersCount()){
+                isNewUser = false;
+            }
+        }
+
+        if (isNewUser){
+
+        }
+
         mCurrentRoom = roomEntity;
-      //  mNavigationView.setOnNavigationItemSelectedListener(this);
-     //   mSearchResultsFragment = SearchResultsFragment.newInstance();
         mRoomInfoFragment = RoomInfoFragment.newInstance(mCurrentRoom);
         removeFragment(TAG_ROOM_INFO_FRAGMENT);
         createOrShowFragment(mRoomInfoFragment, TAG_ROOM_INFO_FRAGMENT);
-        Log.wtf("roominfo","refreshed : "+roomEntity);
     }
 
    /* @Override

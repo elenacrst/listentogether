@@ -3,8 +3,9 @@ package com.elena.listentogether.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+//fixme idea: factory design pattern for sharedprefutils
 
-public class SharedPrefUtils {//idea: factory design pattern for sharedprefutils
+public class SharedPrefUtils {
     public static final String KEY_PROFILE_USERNAME = "PROFILE_USERNAME";
     public static final String KEY_PROFILE_EMAIL = "PROFILE_EMAIL";
     public static final String KEY_PROFILE_ID = "PROFILE_ID";
@@ -16,6 +17,7 @@ public class SharedPrefUtils {//idea: factory design pattern for sharedprefutils
     public static final String KEY_PROFILE_COUNTRY = "PROFILE_COUNTRY";
     public static final String KEY_PROFILE_PHONE = "PROFILE_PHONE";
     public static final String KEY_PROFILE_AVATAR = "PROFILE_AVATAR";
+    public static final String KEY_PROFILE_TYPE = "PROFILE_TYPE";
 
     private SharedPreferences mSharedPref;
 
@@ -28,6 +30,10 @@ public class SharedPrefUtils {//idea: factory design pattern for sharedprefutils
         editor.putString(key, value);
         editor.apply();
 
+    }
+
+    public String getString(String key, String defaultValue){
+        return mSharedPref.getString(key, defaultValue);
     }
 
     public void saveLong(String key, long value){
@@ -50,7 +56,9 @@ public class SharedPrefUtils {//idea: factory design pattern for sharedprefutils
         return mSharedPref.getBoolean(key, defaultValue);
     }
 
-    public String getString(String key, String defaultValue){
-        return mSharedPref.getString(key, defaultValue);
+    public void clear(){
+        SharedPreferences.Editor editor = mSharedPref.edit();
+        editor.clear();
+        editor.apply();
     }
 }
